@@ -1,22 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SQLite;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ConsoleApp1
 {
     public class AppDbContext : DbContext
     {
         public DbSet<LocationData> LocationData { get; set; }
+        public DbSet<Setting> Setting { get; set; }
 
         public AppDbContext()
         {
+            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite(@"Data Source = rscamalertsample.db");
+            optionsBuilder.UseSqlite(@"Data Source = E:\Workarea\ZZZFramework\SqliteIssue\ConsoleApp1\ConsoleApp1\rscamalertsample.db");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,6 +30,15 @@ namespace ConsoleApp1
                 .HasConversion<double>();
         }
 
+    }
+
+    public class Setting
+    {
+        [PrimaryKey]
+        public int Id { get; set; }
+        public string DistanceInMeters { get; set; }
+        public string ContinuousAlertDistance { get; set; }
+        public bool IsContinuousAlert { get; set; }
     }
 
     public class LocationData
